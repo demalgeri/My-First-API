@@ -8,15 +8,24 @@ const app = express();
 const PORT = 3000;
 //Think of app as my server object and get() is one of its methods
 
-//Users are hard-coded in this mini project. Typically, APIs must query a database to 
-//retrieve data and return it.
-//users is a JavaScript array of objects. Each object represents a user
-//users is not JSON. JSON is a string representation of a JavaScript object
-//users can be converted into JSON, but currently it is a real JavaScript array of objects.
-const users = [
-  { id: 1, name: "Alice" },
-  { id: 2, name: "Bob" }
-];
+const sql = require('mssql');
+require('dotenv').config();
+
+const config = {
+  server: 'localhost\\SQLEXPRESS',
+  database: 'MyApiDb',
+  options: {
+    trustServerCertificate: true
+  },
+  authentication: {
+    type: 'ntlm',
+    options: {
+      domain: '', // leave blank or use your Windows machine name
+      userName: process.env.DB_USER,
+      password: process.env.DB_PASS
+    }
+  }
+};
 
 app.use(express.json()); //Required to parse JSON in request bodies
 //Without this, req.body will be undefined and name will be undefined.
